@@ -1,27 +1,26 @@
 http:
-  port: ${PORT:-8080}
+  port: ${PORT:-8081}
 admin:
   port: 9876
   host: localhost
 apiEndpoints:
   pitstop-customer:
-    host: localhost
+    host: customer-container
     paths: '/api/customers/*'
   pitstop-vehicle:
-    host: localhost
+    host: vehicle-container
     paths: '/api/vehicles/*'
   pitstop-workshop:
-    host: localhost
+    host: workshop-container
     paths: '/api/workshop/*'
 serviceEndpoints:
   pitstop-customer-service:
-    url: ${CUSTOMER_URL:-'http://pitstop-customer-service:3001'}
+    url: ${CUSTOMER_URL:-'http://customer-container:3000'}
   pitstop-vehicle-service:
-    url: ${VEHICLE_URL:-'http://pitstop-vehicle-service:3002'}
+    url: ${VEHICLE_URL:-'http://vehicle-container:3001'}
   pitstop-workshop-service:
-    url: ${WORKSHOP_URL:-'http://pitstop-workshop-service:3003'}
-    
- 
+    url: ${WORKSHOP_URL:-'http://workshop-container:3002'}
+
 policies:
   - basic-auth
   - cors

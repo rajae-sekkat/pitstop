@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": null,
+    "password": "sekkat",
     "database": "database_development",
-    "host": "127.0.0.1",
+    "host": "vehicle-db",
     "dialect": "mysql"
   },
   "test": {
@@ -15,9 +15,9 @@
   },
   "production": {
     "username": "root",
-    "password": null,
+    "password": "sekkat",
     "database": "database_production",
-    "host": "127.0.0.1",
+    "host": "vehicle-db",
     "dialect": "mysql"
   }
 }

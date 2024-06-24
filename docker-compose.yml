@@ -1,0 +1,134 @@
+version: '3.8'
+
+services:
+  customer-db:
+    image: mysql:latest
+    container_name: customer-db
+    volumes:
+      - customer-db-vol:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: sekkat
+      MYSQL_DATABASE: database_development
+    ports:
+      - "3307:3306"
+    networks: 
+      - pitstop-network 
+
+  vehicle-db:
+    image: mysql:latest
+    container_name: vehicle-db
+    volumes:
+      - vehicle-db-vol:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: sekkat
+      MYSQL_DATABASE: database_development
+    ports:
+      - "3308:3306"
+    networks: 
+      - pitstop-network 
+
+  workshop-db:
+    image: mysql:latest
+    container_name: workshop-db
+    volumes:
+      - workshop-db-vol:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: sekkat
+      MYSQL_DATABASE: database_development
+    ports:
+      - "3309:3306"
+    networks: 
+      - pitstop-network 
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq-container
+    volumes:
+      - rabbitmq-vol:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+    networks: 
+      - pitstop-network 
+
+  express-gateway:
+    image: rajaeamal301024/gateway:latest
+    container_name: gateway-container
+    ports:
+      - "8081:8081"
+      - "9876:9876"
+    networks: 
+      - pitstop-network 
+    depends_on:
+      - customer-container
+      - vehicle-container
+      - workshop-container
+     
+  
+  customer-container:
+    image: rajaeamal301024/customer:latest
+    container_name: customer-container
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: customer-db
+      DB_USER: root
+      DB_PASS: sekkat
+      DB_NAME: database_development
+    networks: 
+      - pitstop-network 
+    depends_on:
+      - customer-db
+
+  vehicle-container:
+    image: rajaeamal301024/vehicle:latest
+    container_name: vehicle-container
+    ports:
+      - "3001:3000"  # Change host port to 3001
+    environment:
+      DB_HOST: vehicle-db
+      DB_USER: root
+      DB_PASS: sekkat
+      DB_NAME: database_development
+    networks: 
+      - pitstop-network 
+    depends_on:
+      - vehicle-db
+
+  workshop-container:
+    image: rajaeamal301024/workshop:latest
+    container_name: workshop-container
+    ports:
+      - "3002:3000"  # Change host port to 3002
+    environment:
+      DB_HOST: workshop-db
+      DB_USER: root
+      DB_PASS: sekkat
+      DB_NAME: database_development
+    networks: 
+      - pitstop-network 
+    depends_on:
+      - workshop-db
+
+  webapp:
+    image: rajaeamal301024/webapp:latest
+    container_name: webapp-container
+    ports:
+      - "8080:8080"
+    networks: 
+      - pitstop-network 
+    depends_on:
+      - express-gateway
+
+volumes:
+  customer-db-vol:
+    driver: local
+  vehicle-db-vol:
+    driver: local
+  workshop-db-vol:
+    driver: local
+  rabbitmq-vol:
+    driver: local
+
+networks: 
+  pitstop-network: 
+    driver: bridge

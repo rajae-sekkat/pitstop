@@ -1,0 +1,19 @@
+stages:
+  - build
+  - packaging
+  - test
+
+# Configuration du caching pour les dépendances du projet
+cache:
+  paths:
+    - node_modules/
+
+# Variables globales
+variables:
+  DOCKER_DRIVER: overlay2
+
+# Inclusion des différents templates et configurations
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Jobs/Build.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml

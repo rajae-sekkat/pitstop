@@ -56,6 +56,9 @@
 </template>
 
 <script>
+// Import Axios instances from axios-config.js
+import { CustomerAPI, VehicleAPI, WorkshopAPI } from './utils/axios';
+
 export default {
   name: "App",
 
@@ -83,6 +86,13 @@ export default {
       },
     ],
   }),
+
+  // Provide access to Axios instances in your component
+  created() {
+    this.$customerAPI = CustomerAPI;
+    this.$vehicleAPI = VehicleAPI;
+    this.$workshopAPI = WorkshopAPI;
+  },
 };
 </script>
 
